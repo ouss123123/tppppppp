@@ -9,13 +9,14 @@ const LeaveTable = ({ leaveRequests, onStatusChange }) => {
         newEndDate: ""
     });
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onStatusChange(1, "Postpone", formDates);
+        setIsPostponed(false);
+    }
+
     const handlePostpone = (id) => {
-        const newStartDate = prompt("Enter new start date (YYYY-MM-DD):");
-        const newEndDate = prompt("Enter new end date (YYYY-MM-DD):");
         setIsPostponed(true);
-        if (newStartDate && newEndDate) {
-            onStatusChange(id, "postponed", { newStartDate, newEndDate });
-        }
     };
 
     return (
@@ -42,10 +43,11 @@ const LeaveTable = ({ leaveRequests, onStatusChange }) => {
                             <button onClick={() => handlePostpone(request.id)}>Postpone</button>
                             {
                                 isPostponed && (
-                                    <>
-                                        <input type="date" />
-                                        <input type="date" />
-                                    </>
+                                    <div>
+                                        <input type="date" onChange={(e) => setFormDates({...formDates,newStartDate : e.target.value})}/>
+                                        <input type="date" onChange={(e) => setFormDates({...formDates,newEndDate : e.target.value})} />
+                                        <button onClick={handleSubmit}>Submit</button>
+                                    </div>
                                 )
                             }
                         </td>
