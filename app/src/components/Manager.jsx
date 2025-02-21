@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import db from "../db.json";
 import LeaveTable from "./LeaveTable";
+import { useNavigate } from "react-router-dom";
+import "./Manager.css"; // Import the CSS file
 
-const Manager = () => {
+const Manager = ({ setIsConnected }) => {
     const [leaveRequests, setLeaveRequests] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const managerId = 1;
@@ -24,10 +28,16 @@ const Manager = () => {
         );
     };
 
+    const LogOut = () => {
+        setIsConnected(false);
+        navigate(`/`);
+    }
+
     return (
-        <div>
+        <div className="manager-container">
             <h1>Manager</h1>
             <LeaveTable leaveRequests={leaveRequests} onStatusChange={handleStatusChange} />
+            <button onClick={LogOut} className="logout-button">LogOut</button>
         </div>
     );
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import db from "../db.json";
 import { useNavigate } from "react-router-dom";
+import "./Login.css"; // Import the CSS file
 
 const Login = ({ setIsConnected }) => { 
 
@@ -27,9 +28,9 @@ const Login = ({ setIsConnected }) => {
     };
 
     return (
-        <div>
-            <input type="text" onChange={(e) => setForm({ ...form, login: e.target.value })} />
-            <input type="password" onChange={(e) => setForm({ ...form, password: e.target.value })} />
+        <div className="login-container">
+            <input type="text" placeholder="Enter your username" onChange={(e) => setForm({ ...form, login: e.target.value })} />
+            <input type="password" placeholder="Enter your password" onChange={(e) => setForm({ ...form, password: e.target.value })} />
             <button onClick={handleLogin}>Login</button>
         </div>
     );

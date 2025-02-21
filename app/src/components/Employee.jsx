@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import db from "../db.json";
+import "./Employee.css"; // Import the CSS file
 
 const Employee = ({ setIsConnected }) => {
     const [employeeForm, setEmployeeForm] = useState({
@@ -11,6 +13,8 @@ const Employee = ({ setIsConnected }) => {
         startDate: "",
         endDate: ""
     });
+
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -35,22 +39,19 @@ const Employee = ({ setIsConnected }) => {
         }
     };
 
-    console.log(reservations);
-
-    console.log(leaveForm);
-    
+    const logOut = () => {
+        setIsConnected(false)
+        navigate(`/`);
+    }
 
     return (
-        <div>
+        <div className="employee-container">
             <h1>Employee</h1>
             <div>
-                <input type="text" placeholder="name" onChange={(e) => setEmployeeForm({ ...employeeForm, name: e.target.value })} />
                 <input type="date" onChange={(e) => setLeaveForm({ ...leaveForm, startDate: e.target.value })} />
                 <input type="date" onChange={(e) => setLeaveForm({ ...leaveForm, endDate: e.target.value })} />
-                <button onClick={handleSubmit} style={{
-                    width: "100px",
-                    height: "30px",
-                }}>Submit</button>
+                <button onClick={handleSubmit} className="submit-button">Submit</button>
+                <button onClick={logOut} className="logout-button">LogOut</button>
             </div>
         </div>
     );
