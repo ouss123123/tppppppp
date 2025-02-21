@@ -1,18 +1,21 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import db from "../db.json";
-import "./Employee.css"; // Import the CSS file
+import "./Employee.css"; 
+import LeaveTable from "./LeaveTable"; // Import LeaveTable component
 
 const Employee = ({ setIsConnected }) => {
     const [employeeForm, setEmployeeForm] = useState({
         name: "",
         appointementDate: ""
     });
+    const [id, setId] = useState(null);
     const [reservations, setReservations] = useState([]);
     const [leaveForm, setLeaveForm] = useState({
         startDate: "",
         endDate: ""
     });
+    const [leaveRequests, setLeaveRequests] = useState(db.leaveRequests);
 
     const navigate = useNavigate();
 
@@ -23,17 +26,18 @@ const Employee = ({ setIsConnected }) => {
             users.map((user) => {
                 if (user.name === employeeForm.name) {
                     setReservations([...reservations, { name: employeeForm.name, appointementDate: employeeForm.appointementDate }]);
+                    setId(user.id);
                 }
             });
             const newRequest = {
-                id: db.leaveRequests.length + 1,
-                employeeId: 3, 
+                id: leaveRequests.length ? Math.max(...leaveRequests.map(req => req.id)) + 1 : 1,
+                employeeId: id, 
                 managerId: 1, 
                 status: "pending",
                 startDate: leaveForm.startDate,
                 endDate: leaveForm.endDate
             };
-            db.leaveRequests.push(newRequest);
+            setLeaveRequests([...leaveRequests, newRequest]);
         } else {
             console.error("Users data is not an array");
         }
@@ -53,6 +57,7 @@ const Employee = ({ setIsConnected }) => {
                 <button onClick={handleSubmit} className="submit-button">Submit</button>
                 <button onClick={logOut} className="logout-button">LogOut</button>
             </div>
+            <LeaveTable leaveRequests={leaveRequests} /> 
         </div>
     );
 }

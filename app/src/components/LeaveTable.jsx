@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { format, startOfMonth, endOfMonth, eachWeekOfInterval } from "date-fns";
 import db from "../db.json";
-import "./LeaveTable.css"; // Import the CSS file
+import "./LeaveTable.css"; 
 
 const LeaveTable = ({ leaveRequests, onStatusChange }) => {
     const [isPostponed, setIsPostponed] = useState(false);
@@ -9,15 +9,18 @@ const LeaveTable = ({ leaveRequests, onStatusChange }) => {
         newStartDate: "",
         newEndDate: ""
     });
+    const [postponeId, setPostponeId] = useState(null);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onStatusChange(1, "Postpone", formDates);
+        onStatusChange(postponeId, "Postpone", formDates);
         setIsPostponed(false);
+        setPostponeId(null);
     };
 
     const handlePostpone = (id) => {
         setIsPostponed(true);
+        setPostponeId(id);
     };
 
     const currentMonth = new Date();
@@ -43,8 +46,8 @@ const LeaveTable = ({ leaveRequests, onStatusChange }) => {
                 </tr>
             </thead>
             <tbody>
-                {leaveRequests && leaveRequests.map(request => (
-                    <tr key={request.id} style={{ backgroundColor: request.status === "approved" ? "lightgreen" : "white" }}>
+                {leaveRequests.map(request => (
+                    <tr key={request.id} className={request.status === "rejected" ? "rejected" : ""} style={{ backgroundColor: request.status === "approved" ? "lightgreen" : "white" }}>
                         <td>{request.employeeId}</td>
                         {weeks.map((week, index) => (
                             <td key={index} style={{ backgroundColor: request.startDate <= format(week, "yyyy-MM-dd") && request.endDate >= format(week, "yyyy-MM-dd") ? "lightblue" : "white" }}>
@@ -55,7 +58,7 @@ const LeaveTable = ({ leaveRequests, onStatusChange }) => {
                             <button onClick={() => onStatusChange(request.id, "approved")}>Approve</button>
                             <button onClick={() => onStatusChange(request.id, "rejected")}>Reject</button>
                             <button onClick={() => handlePostpone(request.id)}>Postpone</button>
-                            {isPostponed && (
+                            {isPostponed && postponeId === request.id && (
                                 <div>
                                     <input type="date" onChange={(e) => setFormDates({ ...formDates, newStartDate: e.target.value })} />
                                     <input type="date" onChange={(e) => setFormDates({ ...formDates, newEndDate: e.target.value })} />

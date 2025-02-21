@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import db from "../db.json";
 import LeaveTable from "./LeaveTable";
 import { useNavigate } from "react-router-dom";
-import "./Manager.css"; // Import the CSS file
+import "./Manager.css"; 
 
 const Manager = ({ setIsConnected }) => {
     const [leaveRequests, setLeaveRequests] = useState([]);

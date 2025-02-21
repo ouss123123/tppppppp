@@ -1,7 +1,7 @@
 import { useState } from "react";
 import db from "../db.json";
 import { useNavigate } from "react-router-dom";
-import "./Login.css"; // Import the CSS file
+import "./Login.css";
 
 const Login = ({ setIsConnected }) => { 
 
@@ -14,7 +14,7 @@ const Login = ({ setIsConnected }) => {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        const users = db.users; // Ensure users is an array
+        const users = db.users; 
         if (Array.isArray(users)) {
             users.map((user) => {
                 if (user.email === form.login && user.password === form.password) {
